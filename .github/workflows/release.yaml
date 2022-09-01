@@ -33,10 +33,10 @@ jobs:
         run: cd web && pnpm install && pnpm build
 
       - name: Build app
-        run: cd ../cmd/dnslog && go build .
+        run: cd cmd/dnslog && go build .
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dnslog
+          files: cmd/dnslog/dnslog
           draft: true
