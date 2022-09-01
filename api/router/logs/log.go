@@ -1,4 +1,4 @@
-package log
+package logs
 
 import (
 	"dnslog/api/router"
@@ -23,6 +23,7 @@ func New(store store.Store) router.Router {
 func (l *logRouter) initRouter() {
 	l.routes = []router.Route{
 		router.NewGetRoute("/logs", l.getAll),
+		router.NewGetRoute("/logs/:domain", l.getByDomain),
 	}
 }
 
