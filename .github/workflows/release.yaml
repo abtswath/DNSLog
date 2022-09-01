@@ -1,0 +1,42 @@
+name: Release
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Node.js setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Golang setup
+        uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19'
+      
+      - name: Install pnpm
+        run: npm install pnpm -g
+      
+      - name: Build web
+        run: cd web && pnpm install && pnpm build
+
+      - name: Build app
+        run: cd ../cmd/dnslog && go build .
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dnslog
+          draft: true
